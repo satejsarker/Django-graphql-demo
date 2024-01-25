@@ -16,6 +16,18 @@ class AuthorType(DjangoObjectType):
         fields = "__all__"
 
 
+class CreateAuthor(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+
+    author = graphene.Field(AuthorType)
+
+    def mutate(self, info, name):
+        author_data = Author(name=name)
+        author_data.save()
+        return CreateAuthor(author=author_data);
+
+
 class CreatePost(graphene.Mutation):
     class Arguments:
         title = graphene.String(required=True)
@@ -139,6 +151,7 @@ class Mutation(graphene.ObjectType):
     create_post = CreatePost.Field()
     update_post = UpdatePost.Field()
     delete_post = DeletePost.Field()
+    create_author = CreateAuthor.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
