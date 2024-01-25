@@ -1,3 +1,5 @@
+import logging
+
 import graphene
 from graphene_django import DjangoObjectType
 
@@ -125,6 +127,7 @@ class DeletePost(graphene.Mutation):
 class Query(graphene.ObjectType):
     posts = graphene.List(PostType)
     authors = graphene.List(AuthorType)
+    author_by_id = graphene.Field(AuthorType, id=graphene.String(required=True))
 
     def resolve_posts(self, info):
         """
@@ -145,6 +148,13 @@ class Query(graphene.ObjectType):
         :return: A list of all the authors in the database
         """
         return Author.objects.all()
+
+    def resolve_author_by_id(self, info, id):
+        try:
+            return Author.objects.get(pk=id)
+        except Author.DoesNotExist:
+            logging.info("author does not exists")
+            return None
 
 
 class Mutation(graphene.ObjectType):
