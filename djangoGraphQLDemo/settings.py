@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     # installed_apps
     "graphene_django",
 ]
-
+GRAPHENE = {
+    "SCHEMA": "djangoGraphQLDemo.schema.schema"
+}
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
